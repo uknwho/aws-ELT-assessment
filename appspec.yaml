@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:ap-south-1:864899837235:task-definition/usr19-assessment-taskdefinition:1"
+        LoadBalancerInfo:
+          ContainerName: "usr19-ecs-assesemnt-container"
+          ContainerPort: 80

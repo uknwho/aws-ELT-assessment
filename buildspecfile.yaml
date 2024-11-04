@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 864899837235.dkr.ecr.ap-south-1.amazonaws.com/usr19
+
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t training/mywebsiteforecs .
+      - docker tag training/mywebsiteforecs:latest 864899837235.dkr.ecr.ap-south-1.amazonaws.com/usr19/aws-assesment:latest
+
+  post_build:
+    commands:
+      - echo Pushing the Docker image to ECR...
+      - docker push 864899837235.dkr.ecr.ap-south-1.amazonaws.com/usr19/aws-assesment:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"my-container","imageUri":"%s"}]' 864899837235.dkr.ecr.ap-south-1.amazonaws.com/usr19/aws-assesment:latest > imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json
